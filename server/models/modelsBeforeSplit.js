@@ -41,8 +41,10 @@ const OperationSchema = new mongoose.Schema({
   product: { type: mongoose.Types.ObjectId, ref: "Product" },
   timeOperation: { type: Date, required: true },
   updateOperation: { type: Date, required: true }, //אולי אין צורך
-  init: { type: Boolean, required: true },
+  isInit: { type: Boolean, required: true },
   amount: { type: Number, default: 0 },
 });
 
-const Operation = mongoose.model('Operation',OperationSchema)
+const Operation = mongoose.model("Operation", OperationSchema);
+
+module.exports = { User, Category, Product, UserProduct, Operation };
