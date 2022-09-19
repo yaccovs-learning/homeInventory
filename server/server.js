@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config('./.env');
 
 const express = require("express");
 const cors = require("cors");
@@ -39,7 +39,7 @@ app.put(
   "api/products/:productId/conf-min-max",
   EchoStillUnImplementedController
 );
-
+process.env.DEV_DB_URL="mongodb://127.0.0.1:27017/homeInv"
 app.get("*", (req, res) => res.status(404).json(404).end());
 console.log(process.env.DEV_DB_URL);
 mongoose.connect(process.env.DEV_DB_URL, {

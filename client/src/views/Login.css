@@ -1,0 +1,18 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20% auto;
+    padding: 2rem;
+    border-radius: 1rem;
+    background-color:rgb(101, 187, 236);
+    top: 320px;
+    width: min-content;
+}
+
+.error {
+    color: red;
+    font-size: small;
+    font-weight: bold;
+}
