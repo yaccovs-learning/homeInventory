@@ -1,0 +1,10 @@
+.menu {
+    display: flex;
+}
+
+.menu-link {
+    display: block;
+    background-color:darkkhaki;
+    padding: 1rem;
+    margin: 1rem;
+}

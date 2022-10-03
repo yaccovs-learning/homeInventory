@@ -12,25 +12,28 @@ const CategorySchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   color: { type: String },
   imageUrl: { type: String },
-  parentCategory: { type: mongoose.Types.ObjectId, ref: "Category" },
+  parentCategory: [{ type: mongoose.Types.ObjectId, ref: "Category" }],
 });
 const Category = mongoose.model("Category", CategorySchema);
 
 const ProductSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
-  typeUnit: { type: String, enum: ["kg", "unit"], required: true },
+  description: { type: String },
+  unitType: { type: String, enum: ["kg", "unit"], required: true },
   color: { type: String },
   imageUrl: { type: String },
-  parentCategory: { type: mongoose.Types.ObjectId, ref: "Category" },
-  createBy: { type: mongoose.Types.ObjectId, ref: "User" },
+  parentCategory: [{ type: mongoose.Types.ObjectId, ref: "Category" }],
+  createdBy: { type: mongoose.Types.ObjectId, ref: "User" },
+  isPublic: { type: Boolean, required: true },
 });
 const Product = mongoose.model("Product", ProductSchema);
 
 const UserProductSchema = new mongoose.Schema({
   user: { type: mongoose.Types.ObjectId, ref: "User" },
   product: { type: mongoose.Types.ObjectId, ref: "Product" },
-  minAmount: { type: Number, required: true },
-  maxAmount: { type: Number, required: true },
+  unitType: { type: String, enum: ["kg", "unit"], required: true },
+  minAmount: { type: Number, required: true, default: 0 },
+  maxAmount: { type: Number, required: true, default: 0 },
   currentAmount: { type: Number, required: true }, // אם אפשר שיהיה מבוסס על הנתונים של הפעולות
 });
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import API from "./api";
+import API from "./utils/api";
 import LogoutButton from "./components/LogoutButton";
 import UserContext from "./UserContext";
 import Home from "./views/Home";
@@ -17,7 +17,7 @@ function App() {
   
 
   return (
-    <div className="App">
+    <div dir="rtl" className="App">
       <UserContext.Provider
         value={{
           userInfo,
@@ -25,13 +25,11 @@ function App() {
           API
         }}
       >
-        <header className="App-header">
-          {!!userInfo._id && <LogoutButton />}
-        </header>
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/" element={<Home />} />
             <Route path="/*" element={<Home />} />
           </Routes>
         </BrowserRouter>

@@ -2,7 +2,7 @@ import axios from "axios";
 axios.defaults.baseURL = "http://localhost:7000/";
 
 const API = {
-    token: undefined,
+  token: undefined,
   get: (PATH) => {
     return axios.get(PATH);
   },
@@ -18,10 +18,21 @@ const API = {
   setToken(token) {
     this.token = token;
     sessionStorage.setItem("token", token);
-    axios.defaults.headers.common['x-access-token'] = this.token;
+    axios.defaults.headers.common["x-access-token"] = this.token;
   },
   tokenExists() {
-    return !!axios.defaults.headers.common['x-access-token']
-  }
+    if (axios.defaults.headers.common["x-access-token"]) {
+      return true;
+    }
+
+    this.token = sessionStorage.getItem("token");
+
+    if (this.token) {
+      axios.defaults.headers.common["x-access-token"] = this.token;
+      return true;
+    }
+
+    return false;
+  },
 };
 export default API;

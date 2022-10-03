@@ -6,7 +6,6 @@ const bcrypt = require("bcrypt");
 const serverResponse = require("../utils/serverResponse");
 const { User } = require("../models/modelsBeforeSplit");
 const { body, validationResult } = require("express-validator");
-const { default: mongoose } = require("mongoose");
 
 const router = express.Router();
 router.post("/login", async (req, res) => {
@@ -22,9 +21,10 @@ router.post("/login", async (req, res) => {
     console.log(isUserAndPasswordOK);
     if (isUserAndPasswordOK) {
       const userInfo = {
-        _id: userResult._id,
+        id: userResult._id,
         username,
         fullName: userResult.fullName,
+        typeUser: userResult.typeUser,
       };
       const token = jwt.sign(userInfo, JWT_SECRET);
       return serverResponse(res, 200, {
@@ -73,7 +73,7 @@ router.post(
             if (newUser) {
               await newUser.save();
               const userInfo = {
-                _id: newUser._id,
+                id: newUser._id,
                 username: newUser.username,
                 fullName: newUser.fullName,
               };
