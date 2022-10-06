@@ -19,11 +19,11 @@ const Category = mongoose.model("Category", CategorySchema);
 const ProductSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   description: { type: String },
-  unitType: { type: String, enum: ["kg", "unit"], required: true },
+  unitType: { type: String, enum: ["kg", "unit"], default:'unit' },
   color: { type: String },
   imageUrl: { type: String },
   parentCategory: [{ type: mongoose.Types.ObjectId, ref: "Category" }],
-  createdBy: { type: mongoose.Types.ObjectId, ref: "User" },
+  owner: { type: mongoose.Types.ObjectId, ref: "User" },
   isPublic: { type: Boolean, required: true },
 });
 const Product = mongoose.model("Product", ProductSchema);

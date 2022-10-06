@@ -27,6 +27,7 @@ router.post("/login", async (req, res) => {
         typeUser: userResult.typeUser,
       };
       const token = jwt.sign(userInfo, JWT_SECRET);
+      delete userInfo.iat
       return serverResponse(res, 200, {
         auth: true,
         token,
@@ -78,6 +79,8 @@ router.post(
                 fullName: newUser.fullName,
               };
               const token = jwt.sign(userInfo, JWT_SECRET);
+              delete userInfo.iat
+
               return serverResponse(res, 200, {
                 auth: true,
                 token,
@@ -117,6 +120,7 @@ router.post("/checkUser", (req, res) => {
   console.log(token);
   try {
     const data = jwt.verify(token, JWT_SECRET);
+    delete data.iat
     serverResponse(res, 200, data);
   } catch (e) {
     serverResponse(res, 500, { auth: false, err: e });

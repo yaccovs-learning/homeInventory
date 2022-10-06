@@ -3,8 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import UserContext from "../UserContext";
 import CategoriesProduct from "./CategoriesProduct";
-import EditProduct from "./EditProduct";
-import InfoProduct from "./InfoProduct";
+import UserProduct from "./UserProduct";
 import { ShoppingList } from "./ShoppingList";
 import CreateEditProduct from "./CreateEditProduct";
 
@@ -32,7 +31,7 @@ const Home = () => {
       <Header />
       <Routes>
         <Route path="product">
-          <Route path=":productId" element={<InfoProduct />} />
+          <Route path=":productId" element={<UserProduct />} />
           <Route path="create-edit" element={<CreateEditProduct />}>
             <Route path=":productId" element={<CreateEditProduct />} />
           </Route>

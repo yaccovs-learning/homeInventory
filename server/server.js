@@ -33,6 +33,7 @@ const {
   getUserProduct,
 } = require("./controllers/productsUsers");
 const { getUserName } = require("./controllers/users");
+const serverResponse = require("./utils/serverResponse");
 //
 
 //express - middlewares
@@ -40,6 +41,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authController);
+app.use(express.static("../client/build"));
+
 //
 
 //express routes
@@ -65,8 +68,18 @@ app.post("/api/products/add/:productId", verifyUser, addProductToUser);
 app.put("/api/products/change-amount/:productId", verifyUser, changeAmount);
 app.put("/api/products/set-min-max/:productId", verifyUser, setMinMaxAmount);
 
+
+app.get("/api/test", (req,res) => serverResponse(res,200,"asdfasdf"));
+
+app.get("*", (req, res) => {
+  const mainDir = __dirname.split("/").slice(0,-1).join("/")
+  console.log(mainDir + "/client/build/index.html");
+  return res.sendFile(mainDir + "/client/build/index.html");
+  console.log(__dirname + "/../client/build/index.html");
+});
+
+
 process.env.DEV_DB_URL = "mongodb://127.0.0.1:27017/homeInv";
-app.get("*", (req, res) => res.status(404).json(404).end());
 console.log(process.env.DEV_DB_URL);
 mongoose.connect(process.env.DEV_DB_URL, {
   useNewUrlParser: true,

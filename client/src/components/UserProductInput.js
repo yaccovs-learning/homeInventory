@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const InfoProductInput = ({ initial, onChange, min, max }) => {
+const UserProductInput = ({ initial, onChange, min, max }) => {
   const [count, setCount] = useState();
   const [editAble, setEditAble] = useState(false);
 
@@ -87,4 +87,4 @@ const InfoProductInput = ({ initial, onChange, min, max }) => {
   );
 };
 
-export default InfoProductInput;
+export default UserProductInput;

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../UserContext";
-import { dict } from "../utils/dict";
+import { ShoppingListItem } from "../components/ShoppingListItem";
 
 export const ShoppingList = () => {
   const { API } = useContext(UserContext);
@@ -11,35 +11,31 @@ export const ShoppingList = () => {
       const products = response.data.products;
       setList(products);
     })();
+    // eslint-disable-next-line
   }, []);
 
   return (
-    <div style={{ width: "10rem" }}>
-      {list
-        .filter((item) => item.currentAmount - item.minAmount < 0)
-        .map((item, index) => (
-          <ShoppingListItem key={index} product={item} />
-        ))}
-    </div>
-  );
-};
-
-const ShoppingListItem = ({ product }) => {
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        height: "2rem",
-      }}
-    >
-      <div>{product.product.name}</div>
-      <div>
-        {product.minAmount < product.maxAmount && (
-          <> {product.maxAmount - product.currentAmount} - </>
-        )}
-        {product.minAmount - product.currentAmount} {dict[product.unitType]}
+    <>
+      <div style={{ width: "18rem" }}>
+        <h2>רשימת קניות</h2>
+        {list
+          .filter((item) => item.currentAmount - item.minAmount < 0)
+          .map((item, index) => (
+            <ShoppingListItem key={index} product={item} />
+          ))}
       </div>
-    </div>
+      <div style={{ width: "18rem" }}>
+        <h5>לא דחוף</h5>
+        {list
+          .filter(
+            (item) =>
+              item.currentAmount - item.minAmount >= 0 &&
+              item.currentAmount - item.maxAmount < 0
+          )
+          .map((item, index) => (
+            <ShoppingListItem key={index} product={item} />
+          ))}
+      </div>
+    </>
   );
 };

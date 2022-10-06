@@ -1,5 +1,8 @@
 import axios from "axios";
-axios.defaults.baseURL = "http://localhost:7000/";
+axios.defaults.baseURL =
+  !process.env.NODE_ENV || process.env.NODE_ENV === "development"
+    ? "http://192.168.1.128:7000/"
+    : "";
 
 const API = {
   token: undefined,

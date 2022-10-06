@@ -115,6 +115,8 @@ const setMinMaxAmount = async (req, res) => {
   const minAmount = Number(req.body.min);
   const maxAmount = Number(req.body.max);
 
+  if (minAmount>maxAmount) return serverResponse(res, 501, { status: "failed", error:"min is greater than max" });
+
   const query = {
     product: productId,
     user: req.userInfo.id,

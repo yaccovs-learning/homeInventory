@@ -3,7 +3,7 @@ import logo from "../logo.svg";
 import "./Login.css";
 
 import UserContext from "../UserContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { setUserInfo, API } = useContext(UserContext);
@@ -55,15 +55,17 @@ const Login = () => {
         </div>
         <button
           onClick={(e) => {
+            
             handleSubmit();
             e.preventDefault();
-            return false;
+            // return false;
           }}
           type="submit"
         >
           Login!
         </button>
       </form>
+      <Link to={'/register'}>להרשמה</Link>
     </div>
   );
 };

@@ -65,7 +65,7 @@ const CategoriesProduct = () => {
 
   return (
     <div>
-      <h2>מוצרים</h2>
+      <h2>{categoryInfo?categoryInfo.name:"מוצרים"}</h2>
       <h5>קטגוריות:</h5>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {categoryInfo && <button onClick={handleUpCategory}>⬆ Up</button>}

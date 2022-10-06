@@ -12,12 +12,17 @@ const getProduct = async (req, res) => {
   if (!mongoose.isValidObjectId(productId)) {
     return serverResponse(res, 501, { error: "Invalid id" });
   }
-  
+
   try {
     product = await Product.findOne({ _id: productId });
     userProduct = await UserProduct.findOne({
       product: productId,
       user: req.userInfo.id,
+    });
+    await product.populate({
+      path: "owner",
+      model: "User",
+      select: "username",
     });
     console.log(product, userProduct);
     return serverResponse(res, 200, { product, userProduct });
@@ -29,15 +34,57 @@ const getProduct = async (req, res) => {
 
 /******** !!!לאבטח!!! *******/
 const createProduct = async (req, res) => {
-  console.log(req.body);
-  try {
-    const newProduct = new Product(req.body);
-    await newProduct.save();
-    console.log(newProduct);
-    return serverResponse(res, 200, newProduct);
-  } catch (error) {
-    return serverResponse(res, 501, { error });
+  if (Array.isArray(req.body.parentCategory))
+    req.body.parentCategory =
+      req.body.parentCategory[req.body.parentCategory.length - 1];
+
+  req.body.isPublic = !!req.body.isPublic;
+
+  const allowProp = [
+    "name",
+    "description",
+    "unitType",
+    "color",
+    "imageUrl",
+    "parentCategory",
+    "owner",
+    "isPublic",
+  ];
+  const updates = {};
+
+  allowProp.forEach((key) => {
+    updates[key] = req.body[key];
+    delete req.body[key];
+  });
+  const disallowUpdate = Object.keys(req.body);
+  console.log({ disallowUpdate, updates });
+  // if (disallowUpdate.length > 0) {
+  //   return serverResponse(res, 401, {
+  //     error: "disallow change keys:" + disallowUpdate.join(", "),
+  //   });
+  // }
+  if (req.userInfo.typeUser !== "admin") {
+    updates.owner = req.userInfo.id;
   }
+
+  if (mongoose.isValidObjectId(updates.parentCategory)) {
+    const parent = await Category.findOne({ _id: updates.parentCategory });
+    // parent.parentCategory = parent.parentCategory || []
+    console.log(parent.parentCategory);
+    updates.parentCategory = [...parent.parentCategory, updates.parentCategory];
+  } else if (!updates.parentCategory) {
+    delete updates.parentCategory;
+  } else {
+    return serverResponse(res, 501, {
+      error: "Invalid parentCategory",
+      parentCategory: updates.parentCategory,
+    });
+  }
+
+  const newProduct = new Product(updates);
+  await newProduct.save();
+
+  return serverResponse(res, 200, { newProduct });
 };
 
 /******** !!!לאבטח!!! *******/
@@ -47,18 +94,22 @@ const editProduct = async (req, res) => {
   }
 
   const { productId } = req.params;
-  const reqUpdates = req.body;
-
+  if (Array.isArray(req.body.parentCategory))
+    req.body.parentCategory =
+      req.body.parentCategory[req.body.parentCategory.length - 1];
   if (!mongoose.isValidObjectId(productId)) {
     return serverResponse(res, 501, { error: "Invalid id" });
   }
 
   const allowUpdates = [
     "name",
-    "typeUnit",
+    "description",
+    "unitType",
     "color",
     "imageUrl",
     "parentCategory",
+    "owner",
+    "isPublic",
   ];
   const updates = {};
 
@@ -67,12 +118,13 @@ const editProduct = async (req, res) => {
     delete req.body[key];
   });
   const disallowUpdate = Object.keys(req.body);
+  console.log({ disallowUpdate, updates });
 
-  if (disallowUpdate.length > 0) {
-    return serverResponse(res, 401, {
-      error: "disallow change keys:" + disallowUpdate.join(", "),
-    });
-  }
+  // if (disallowUpdate.length > 0) {
+  //   return serverResponse(res, 401, {
+  //     error: "disallow change keys:" + disallowUpdate.join(", "),
+  //   });
+  // }
 
   if (mongoose.isValidObjectId(updates.parentCategory)) {
     const parent = await Category.findOne({ _id: updates.parentCategory });
@@ -80,7 +132,10 @@ const editProduct = async (req, res) => {
     console.log(parent.parentCategory);
     updates.parentCategory = [...parent.parentCategory, updates.parentCategory];
   } else if (updates.parentCategory !== undefined) {
-    return serverResponse(res, 501, { error: "Invalid parent Id" });
+    return serverResponse(res, 501, {
+      error: "Invalid parentCategory",
+      parentCategory: updates.parentCategory,
+    });
   }
 
   const updatedProduct = await Product.findOneAndUpdate(
@@ -92,14 +147,30 @@ const editProduct = async (req, res) => {
   return serverResponse(res, 200, { updatedProduct });
 };
 
+// מחיקת מוצר
 const deleteProduct = async (req, res) => {
   if (req.userInfo.typeUser !== "admin") {
     return serverResponse(res, 401, { message: "You are not admin!" });
   }
-
+  const recursive = false;
   const { productId } = req.params;
   if (!mongoose.isValidObjectId(productId)) {
     return serverResponse(res, 501, { error: "Invalid id" });
+  }
+
+  if (recursive) {
+    await UserProduct.deleteMany({ product: productId });
+  } else {
+    const userProductLinks = await UserProduct.find({
+      product: productId,
+    }).populate({ path: "user", select: "name" });
+    console.log(userProductLinks);
+
+    if (userProductLinks.length > 0) {
+      return serverResponse(res, 400, {
+        error: `${productId} not deleted, There are UserProduct linked`,
+      });
+    }
   }
   const productDeleted = await Product.findOneAndDelete({ _id: productId });
   console.log(productDeleted);
