@@ -81,10 +81,14 @@ app.get("*", (req, res) => {
 
 process.env.DEV_DB_URL = "mongodb://127.0.0.1:27017/homeInv";
 console.log(process.env.DEV_DB_URL);
+try {
 mongoose.connect(process.env.DEV_DB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+} catch (e) {
+  console.log('not connect to db')
+}
 
 const port = 7000;
 app.listen(port, () => console.log("listen on port " + port));

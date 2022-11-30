@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./UserProductInput.css";
 
 const UserProductInput = ({ initial, onChange, min, max }) => {
   const [count, setCount] = useState();
@@ -51,37 +52,31 @@ const UserProductInput = ({ initial, onChange, min, max }) => {
   }, [initial]);
 
   return (
-    <div
-      style={{
-        display: "flex-inline",
-        flexDirection: "column",
-        width: "fit-content",
-      }}
-    >
+    <div className="user-product-input">
       <div
+        className="user-product-input-2"
         style={{
-          display: "flex",
-          width: "fit-content",
-          boxSizing: "border-box",
           backgroundColor: isChange() ? "orange" : "inherit",
         }}
       >
         <button onClick={handlePlus}>+</button>
-        {editAble ? (
-          <input
-            type={"number"}
-            value={count}
-            onChange={(e) => handleChange(e.target.value)}
-          />
-        ) : (
-          <div onDoubleClick={() => setEditAble(true)}>{count}</div>
-        )}
+        <div className="value-input">
+          {editAble ? (
+            <input
+              type={"number"}
+              value={count}
+              onChange={(e) => handleChange(e.target.value)}
+            />
+          ) : (
+            <div onDoubleClick={() => setEditAble(true)}>{count}</div>
+          )}
+        </div>
         <button onClick={handleMinus}>-</button>
       </div>
       {isChange() ? (
-        <button onClick={handleUpdate}>עדכן</button>
+        <button onClick={handleUpdate} style={{width:'100%'}}>עדכן</button>
       ) : (
-        <div>מעודכן</div>
+        <div style={{width:'100%', textAlign:'center '}}>מעודכן</div>
       )}
     </div>
   );

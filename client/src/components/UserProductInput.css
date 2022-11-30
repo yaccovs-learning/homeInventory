@@ -1,0 +1,21 @@
+.user-product-input-2 {
+  display: flex;
+  width: fit-content;
+  box-sizing: border-box;
+}
+
+.user-product-input {
+  display: flex-inline;
+  flex-direction: column;
+  width: fit-content;
+  margin-left: 0.5rem;
+}
+
+.user-product-input input {
+  width: 5rem;
+}
+
+.value-input {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}

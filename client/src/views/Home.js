@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import UserContext from "../UserContext";
 import CategoriesProduct from "./CategoriesProduct";
 import UserProduct from "./UserProduct";
 import { ShoppingList } from "./ShoppingList";
 import CreateEditProduct from "./CreateEditProduct";
+import CreateEditCategory from "./CreateEditCategory";
 
 const Home = () => {
   const { userInfo, setUserInfo, API } = useContext(UserContext);
@@ -27,9 +28,15 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Home - {userInfo?.fullName}</h1>
+      <h1 style={{textAlign:'center'}}>HomeInventory</h1>
       <Header />
       <Routes>
+        <Route path="category" element={<CategoriesProduct />}>
+          <Route path=":categoryId" element={<CategoriesProduct />} />
+          <Route path="create-edit" element={<CreateEditCategory />}>
+            <Route path=":categorytId" element={<CreateEditCategory />} />
+          </Route>
+        </Route>
         <Route path="product">
           <Route path=":productId" element={<UserProduct />} />
           <Route path="create-edit" element={<CreateEditProduct />}>
@@ -37,9 +44,6 @@ const Home = () => {
           </Route>
         </Route>
         <Route path="shoppinglist" element={<ShoppingList />} />
-        <Route path="category" element={<CategoriesProduct />}>
-          <Route path=":categoryId" element={<CategoriesProduct />} />
-        </Route>
       </Routes>
     </div>
   );

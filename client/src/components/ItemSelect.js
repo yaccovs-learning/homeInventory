@@ -7,7 +7,7 @@ const ItemSelect = ({ children, onClick, type, image, color }) => {
   if (image) styleObj.backgroundImage = `url(${image})`
 
   return (
-    <div onClick={onClick} className={"item-select " + type} style={styleObj}>
+    <div onClick={onClick} className={"item-select buttons-with-shadow " + type} style={styleObj}>
       {children}
     </div>
   );

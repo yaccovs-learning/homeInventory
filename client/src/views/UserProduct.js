@@ -19,7 +19,7 @@ const UserProduct = () => {
     maxAmount: 0,
     currentAmount: 0,
     unitType: "unit",
-    product: {name:'Loading...'}
+    product: { name: "Loading..." },
   });
 
   const [viewStates, setViewStates] = useState({ min: false, max: false });
@@ -32,29 +32,32 @@ const UserProduct = () => {
     });
   };
   console.log(userProduct.unitType);
-  const unitType = dict[userProduct.unitType] || dict[userProduct.product.unitType];
+  const unitType =
+    dict[userProduct.unitType] || dict[userProduct.product.unitType];
 
   useEffect(() => {
-    (async () => {
-      const response = await API.get(`/api/products/${productId}`);
-      const newProduct = response.data.product;
-      const newUserProduct = response.data.userProduct;
-      if (newUserProduct) {
-        newUserProduct.product = response.data.product;
-        setUserProduct(newUserProduct);
-      } else if (newProduct) {
-        setUserProduct((prev) => {
-          prev = {...prev}
-          prev.product = {...newProduct};
-          prev.unitType = newProduct.unitType;
-          console.log("prev", prev);
-          console.log("prev.product.name", prev.product.name);
-          return prev;
-        });
-      }
-    })();
+    if (API.token) {
+      (async () => {
+        const response = await API.get(`/api/products/${productId}`);
+        const newProduct = response.data.product;
+        const newUserProduct = response.data.userProduct;
+        if (newUserProduct) {
+          newUserProduct.product = response.data.product;
+          setUserProduct(newUserProduct);
+        } else if (newProduct) {
+          setUserProduct((prev) => {
+            prev = { ...prev };
+            prev.product = { ...newProduct };
+            prev.unitType = newProduct.unitType;
+            console.log("prev", prev);
+            console.log("prev.product.name", prev.product.name);
+            return prev;
+          });
+        }
+      })();
+    }
     // eslint-disable-next-line
-  }, [productId]);
+  }, [productId,API.token]);
 
   const amountSetHandler = async (num) => {
     const response = await API.put(`/api/products/change-amount/${productId}`, {
@@ -95,7 +98,7 @@ const UserProduct = () => {
         </div>
         <div>
           <div style={{ display: "flex" }}>
-            <label>כמות נוכחית:</label>
+            <label>כמות נוכחית:<br/></label>
             <UserProductInput
               initial={userProduct.currentAmount}
               onChange={amountSetHandler}
@@ -107,36 +110,7 @@ const UserProduct = () => {
             <div className="warning">הכמות קטנה מהכמות המינימלית הרצויה!</div>
           )}
         </div>
-        {/* <div style={{ display: "flex" }}>
-          כמות רצויה מינימלית: {product.minAmount} {unitType}
-          {viewStates.min ? (
-            <>
-              <UserProductInput
-                initial={product.minAmount}
-                onChange={(num) => minMaxSetHandler("min", num)}
-                max={product.maxAmount}
-              />{" "}
-              {unitType}
-            </>
-          ) : (
-            <button onClick={() => viewsHandler("min")}>הגדר</button>
-          )}
-        </div>
-        <div>
-          כמות רצויה מקסימלית: {product.maxAmount} {unitType}
-          {viewStates.max ? (
-            <>
-              <UserProductInput
-                initial={product.maxAmount}
-                onChange={(num) => minMaxSetHandler("max", num)}
-                min={product.minAmount}
-              />{" "}
-              {unitType}
-            </>
-          ) : (
-            <button onClick={() => viewsHandler("max")}>הגדר</button>
-          )}
-        </div> */}
+        <h5>כמות רצויה:</h5>
         <UserProductField
           inEdit={viewStates}
           product={userProduct}
@@ -145,7 +119,7 @@ const UserProduct = () => {
           setStateEdit={viewsHandler}
           valueChange="min"
         >
-          כמות רצויה מינימלית
+          מינימלית
         </UserProductField>
         <UserProductField
           inEdit={viewStates}
@@ -155,7 +129,7 @@ const UserProduct = () => {
           setStateEdit={viewsHandler}
           valueChange="max"
         >
-          כמות רצויה מקסימלית
+          מקסימלית
         </UserProductField>
       </div>
     </div>

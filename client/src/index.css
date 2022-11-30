@@ -5,6 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url('../public/blake-wisz-grv3Yz9n59w-unsplash-e.jpg');
+  background-size: cover;
+
 }
 
 code {

@@ -4,7 +4,7 @@ import API from "./utils/api";
 import LogoutButton from "./components/LogoutButton";
 import UserContext from "./UserContext";
 import Home from "./views/Home";
-// import './App.css';
+import './App.css';
 import Login from "./views/Login";
 import Register from "./views/Register";
 

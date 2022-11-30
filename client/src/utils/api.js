@@ -20,7 +20,7 @@ const API = {
   },
   setToken(token) {
     this.token = token;
-    sessionStorage.setItem("token", token);
+    localStorage.setItem("token", token);
     axios.defaults.headers.common["x-access-token"] = this.token;
   },
   tokenExists() {
@@ -28,7 +28,7 @@ const API = {
       return true;
     }
 
-    this.token = sessionStorage.getItem("token");
+    this.token = localStorage.getItem("token");
 
     if (this.token) {
       axios.defaults.headers.common["x-access-token"] = this.token;

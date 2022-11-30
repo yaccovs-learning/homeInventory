@@ -14,28 +14,37 @@ export const ShoppingList = () => {
     // eslint-disable-next-line
   }, []);
 
+  const listFirstBuy = list.filter(
+    (item) => item.currentAmount - item.minAmount < 0
+  );
+  const listLastBuy = list.filter(
+    (item) =>
+      item.currentAmount - item.minAmount >= 0 &&
+      item.currentAmount - item.maxAmount < 0
+  );
+
   return (
     <>
-      <div style={{ width: "18rem" }}>
-        <h2>רשימת קניות</h2>
-        {list
-          .filter((item) => item.currentAmount - item.minAmount < 0)
-          .map((item, index) => (
+      <h2>רשימת קניות</h2>
+      {listFirstBuy.length === 0 &&
+        listLastBuy.length === 0 &&
+        "אין חוסרים במלאי"}
+        
+      {listFirstBuy.length > 0 && (
+        <div style={{ width: "18rem" }}>
+          {listFirstBuy.map((item, index) => (
             <ShoppingListItem key={index} product={item} />
           ))}
-      </div>
-      <div style={{ width: "18rem" }}>
-        <h5>לא דחוף</h5>
-        {list
-          .filter(
-            (item) =>
-              item.currentAmount - item.minAmount >= 0 &&
-              item.currentAmount - item.maxAmount < 0
-          )
-          .map((item, index) => (
+        </div>
+      )}
+      {listLastBuy.length > 0 && (
+        <div style={{ width: "18rem" }}>
+          <h5>לא דחוף</h5>
+          {listLastBuy.map((item, index) => (
             <ShoppingListItem key={index} product={item} />
           ))}
-      </div>
+        </div>
+      )}
     </>
   );
 };

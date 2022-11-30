@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
+import UserContext from "../UserContext";
 
-const LogoutButton = ({ setUserInfo }) => {
+const LogoutButton = ({ setUserInfo, className }) => {
+  const { userInfo} = useContext(UserContext);
+
   const handleClick = () => {
-    sessionStorage.removeItem("token");
-    
+    localStorage.removeItem("token");
+
     window.location.href = "/";
   };
-  return <button onClick={handleClick}>Logout</button>;
+  return (
+    <div className={className}>
+      <button onClick={handleClick}>
+        Logout
+      </button>{" "}
+      - {userInfo?.fullName}
+    </div>
+  );
 };
 
 export default LogoutButton;

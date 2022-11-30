@@ -4,7 +4,7 @@ import UserContext from "../UserContext";
 import "./Header.css";
 import LogoutButton from "./LogoutButton";
 const Header = () => {
-    const { userInfo, setUserInfo, API } = useContext(UserContext);
+    const { userInfo} = useContext(UserContext);
 
   const links = [
     { to: "shoppinglist", text: "רשימת קניות" },
@@ -12,10 +12,10 @@ const Header = () => {
   ];
   return (
     <nav>
+      {!!userInfo.id && <LogoutButton className="logout-button" />}
       <div className="menu">
-      {!!userInfo.id && <LogoutButton />}
         {links.map((link, index) => (
-          <Link key={index} className="menu-link" to={link.to}>
+          <Link key={index} className="buttons-with-shadow menu-link" to={link.to}>
             {link.text}
           </Link>
         ))}
