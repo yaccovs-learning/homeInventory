@@ -4,6 +4,7 @@ import UserProductInput from "../components/UserProductInput";
 import UserContext from "../UserContext";
 import { dict } from "../utils/dict";
 import "./UserProduct.css";
+import { UserProductField } from "./UserProductField";
 
 const UserProduct = () => {
   const { API } = useContext(UserContext);
@@ -22,13 +23,13 @@ const UserProduct = () => {
     product: { name: "Loading..." },
   });
 
-  const [viewStates, setViewStates] = useState({ min: false, max: false });
-  const viewsHandler = (view) => {
-    setViewStates((prev) => {
-      const newViewsState = { ...prev };
-      newViewsState[view] = !newViewsState[view];
-      console.log(newViewsState);
-      return newViewsState;
+  const [viewStates, setEditModeStates] = useState({ min: false, max: false });
+  const editModeHandler = (view) => {
+    setEditModeStates((prev) => {
+      const newEditModeState = { ...prev };
+      newEditModeState[view] = !newEditModeState[view];
+      console.log(newEditModeState);
+      return newEditModeState;
     });
   };
   console.log(userProduct.unitType);
@@ -73,12 +74,17 @@ const UserProduct = () => {
       max: userProduct.maxAmount,
     };
     data[state] += num;
+    if (state === "max" && data[state] < userProduct.minAmount) {
+      data['min'] = data['max']
+    } else if  (state === "min" && data[state] > userProduct.maxAmount) {
+      data['max'] = data['min']
+    } 
     const response = await API.put(
       `/api/products/set-min-max/${productId}`,
       data
     );
     setUserProduct(response.data.data);
-    viewsHandler(state);
+    editModeHandler(state);
   };
 
   return (
@@ -116,7 +122,7 @@ const UserProduct = () => {
           product={userProduct}
           onChange={minMaxSetHandler}
           unitType={unitType}
-          setStateEdit={viewsHandler}
+          setStateEdit={editModeHandler}
           valueChange="min"
         >
           מינימלית
@@ -126,48 +132,12 @@ const UserProduct = () => {
           product={userProduct}
           onChange={minMaxSetHandler}
           unitType={unitType}
-          setStateEdit={viewsHandler}
+          setStateEdit={editModeHandler}
           valueChange="max"
         >
           מקסימלית
         </UserProductField>
       </div>
-    </div>
-  );
-};
-
-const UserProductField = ({
-  product,
-  inEdit,
-  unitType,
-  onChange,
-  children,
-  setStateEdit,
-  valueChange,
-}) => {
-  const data = { min: product.minAmount, max: product.maxAmount };
-  return (
-    <div
-      style={{
-        display: "flex",
-        width: "18rem",
-        justifyContent: "space-between",
-      }}
-    >
-      {children}: {data[valueChange]} {unitType}
-      {inEdit[valueChange] ? (
-        <>
-          <UserProductInput
-            initial={data[valueChange]}
-            onChange={(num) => onChange(valueChange, num)}
-            max={valueChange === "min" && data["max"]}
-            min={valueChange === "max" && data["min"]}
-          />{" "}
-          {unitType}
-        </>
-      ) : (
-        <button onClick={(num) => setStateEdit(valueChange)}>הגדר</button>
-      )}
     </div>
   );
 };

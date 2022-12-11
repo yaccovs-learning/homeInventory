@@ -32,9 +32,9 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="login-wrapper">
       <form className="login">
-        <h1>Login</h1>
+        <h1>התחברות</h1>
         <img alt="logo" src={logo} />
         <input
           type="text"
@@ -64,8 +64,8 @@ const Login = () => {
         >
           Login!
         </button>
+        <Link to={'/register'}>להרשמה</Link>
       </form>
-      <Link to={'/register'}>להרשמה</Link>
     </div>
   );
 };

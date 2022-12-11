@@ -36,9 +36,9 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div className="login-wrapper">
       <form className="login">
-        <h1>Register</h1>
+        <h1>הרשמה</h1>
         <img alt="logo" src={logo} />
         <input
           type="text"

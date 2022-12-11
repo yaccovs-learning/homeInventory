@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "cd client && yarn && yarn build",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd server && nodemon start",
     "server": "cd server && npm run start"
   },
   "keywords": [],

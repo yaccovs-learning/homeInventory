@@ -58,7 +58,7 @@ const editCategory = async (req, res) => {
   }
 
   const { categoryId } = req.params;
-  if (!mongoose.isValidObjectId(productId)) {
+  if (!mongoose.isValidObjectId(categoryId)) {
     return serverResponse(res, 501, { error: "Invalid id" });
   }
 
@@ -81,7 +81,7 @@ const editCategory = async (req, res) => {
   if (mongoose.isValidObjectId(updates.parentCategory)) {
     const parent = Category.findOne({ _id: updates.parentCategory });
     updates.parentCategory = [...parent.parentCategory, updates.parentCategory];
-  } else if (updates.parentCategory !== undefined) {
+  } else if (updates.parentCategory.length !== 0) {
     return serverResponse(res, 501, { error: "Invalid parent Id" });
   }
 

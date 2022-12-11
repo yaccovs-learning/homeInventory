@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { dict } from "../utils/dict";
+import "./ShoppingListItem.css"
 
 export const ShoppingListItem = ({ product }) => {
   const min = product.minAmount - product.currentAmount;
@@ -8,12 +9,7 @@ export const ShoppingListItem = ({ product }) => {
 
   return (
     <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        height: "2rem",
-        border: "1px solid black",
-      }}
+    className="shoppinglist-item"
     >
       <Link to={`/product/${product.product._id}`}>
         <div>{product.product.name}</div>

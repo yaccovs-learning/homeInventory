@@ -28,14 +28,15 @@ const Home = () => {
 
   return (
     <div>
-      <h1 style={{textAlign:'center'}}>HomeInventory</h1>
+      <h1 style={{ textAlign: "center" }}>HomeInventory</h1>
       <Header />
       <Routes>
-        <Route path="category" element={<CategoriesProduct />}>
+        <Route path="category">
           <Route path=":categoryId" element={<CategoriesProduct />} />
           <Route path="create-edit" element={<CreateEditCategory />}>
-            <Route path=":categorytId" element={<CreateEditCategory />} />
+            <Route path=":categoryId" element={<CreateEditCategory />} />
           </Route>
+          <Route path="" element={<CategoriesProduct />} />
         </Route>
         <Route path="product">
           <Route path=":productId" element={<UserProduct />} />

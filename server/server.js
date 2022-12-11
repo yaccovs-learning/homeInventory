@@ -75,14 +75,12 @@ app.get("*", (req, res) => {
   const mainDir = __dirname.split("/").slice(0,-1).join("/")
   console.log(mainDir + "/client/build/index.html");
   return res.sendFile(mainDir + "/client/build/index.html");
-  console.log(__dirname + "/../client/build/index.html");
 });
 
 
-process.env.DEV_DB_URL = "mongodb://127.0.0.1:27017/homeInv";
 console.log(process.env.DEV_DB_URL);
 try {
-mongoose.connect(process.env.DEV_DB_URL, {
+mongoose.connect(process.env.DB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

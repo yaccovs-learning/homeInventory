@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../UserContext";
 import { ShoppingListItem } from "../components/ShoppingListItem";
+import "./ShoppingList.css";
 
 export const ShoppingList = () => {
   const { API } = useContext(UserContext);
@@ -29,16 +30,16 @@ export const ShoppingList = () => {
       {listFirstBuy.length === 0 &&
         listLastBuy.length === 0 &&
         "אין חוסרים במלאי"}
-        
+
       {listFirstBuy.length > 0 && (
-        <div style={{ width: "18rem" }}>
+        <div className="shoppinglist-list">
           {listFirstBuy.map((item, index) => (
             <ShoppingListItem key={index} product={item} />
           ))}
         </div>
       )}
       {listLastBuy.length > 0 && (
-        <div style={{ width: "18rem" }}>
+        <div className="shoppinglist-list">
           <h5>לא דחוף</h5>
           {listLastBuy.map((item, index) => (
             <ShoppingListItem key={index} product={item} />

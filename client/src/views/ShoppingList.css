@@ -1,0 +1,7 @@
+@media (min-width: 600px) {
+.shoppinglist-list {
+ width: 25rem;
+ margin: 1rem;
+ padding: 0.5rem;
+}
+}
