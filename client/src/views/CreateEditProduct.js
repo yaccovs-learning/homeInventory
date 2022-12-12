@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import UserContext from "../UserContext";
 import { dict } from "../utils/dict";
+import { HexColorPicker } from "react-colorful";
 
 const CreateEditProduct = () => {
   const { productId } = useParams();
   const { API, userInfo } = useContext(UserContext);
   const [product, setProduct] = useState({});
   const [categories, setCatgories] = useState([]);
+  const [color, setColor] = useState("#aabbcc");
 
   useEffect(() => {
     (async () => {
@@ -49,8 +51,8 @@ const CreateEditProduct = () => {
       get options() {
         const categoriesOpts = categories.map(({ _id, name }) => {
           return { key: _id, name };
-        })
-        categoriesOpts.unshift({key:"",name:" === ראשי === "})
+        });
+        categoriesOpts.unshift({ key: "", name: " === ראשי === " });
         return categoriesOpts;
       },
     },
@@ -77,9 +79,8 @@ const CreateEditProduct = () => {
     ));
   };
 
-
   const changeHandler = ({ target: { name, value } }) => {
-    console.log("name", name, "value",value);
+    console.log("name", name, "value", value);
     setProduct((prev) => {
       return { ...prev, [name]: value };
     });
@@ -93,14 +94,20 @@ const CreateEditProduct = () => {
     }
   };
 
-  const deleteHandler = async ()=> {
-    API.delete(`/api/products/delete/${productId}`)
-  }
-// console.log(`${userInfo.id} === ${product.owner._id} = ${userInfo.id === product.owner}`)
+  const deleteHandler = async () => {
+    API.delete(`/api/products/delete/${productId}`);
+  };
+  // console.log(`${userInfo.id} === ${product.owner._id} = ${userInfo.id === product.owner}`)
   return (
     <div>
-      <h3>{productId ?"עריכת":"יצירת"} מוצר: {product.name}</h3>
-      {productId && (userInfo.typeUser === 'admin' || userInfo.id === product.owner?._id) && <button onClick={deleteHandler}>מחיקה</button>}
+      <h3>
+        {productId ? "עריכת" : "יצירת"} מוצר: {product.name}
+      </h3>
+      {productId &&
+        (userInfo.typeUser === "admin" ||
+          userInfo.id === product.owner?._id) && (
+          <button onClick={deleteHandler}>מחיקה</button>
+        )}
       {propsProduct.map(({ key, name, type, options, description }) => (
         <div key={key} style={{ margin: "1rem" }}>
           <label>
@@ -133,6 +140,12 @@ const CreateEditProduct = () => {
                     backgroundColor: product[key],
                   }}
                 ></div>
+                <HexColorPicker
+                  color={product[key]}
+                  onChange={(color) =>
+                    changeHandler({ target: { name: key, value: color } })
+                  }
+                />
               </>
             ) : (
               <input

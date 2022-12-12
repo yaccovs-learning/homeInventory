@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import UserContext from "../UserContext";
 import { dict } from "../utils/dict";
+import { HexColorPicker } from "react-colorful";
 
 const CreateEditCategory = () => {
   const { categoryId } = useParams();
@@ -125,6 +126,12 @@ const CreateEditCategory = () => {
                     backgroundColor: category[key],
                   }}
                 ></div>
+                <HexColorPicker
+                  color={category[key]}
+                  onChange={(color) =>
+                    changeHandler({ target: { name: key, value: color } })
+                  }
+                />
               </>
             ) : (
               <input
@@ -147,7 +154,12 @@ export default CreateEditCategory;
 const NewCategory = () => {
   const [editState, setEditState] = useState(false);
   return (
-    <div onClick={()=>{setEditState(prev=>!prev)}}>
-    {editState ? <>open</> : <>close</>}
-    </div>);
+    <div
+      onClick={() => {
+        setEditState((prev) => !prev);
+      }}
+    >
+      {editState ? <>open</> : <>close</>}
+    </div>
+  );
 };
